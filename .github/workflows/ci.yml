@@ -25,12 +25,8 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
-      # Ensure pnpm is available on PATH
-      - name: Install pnpm via Corepack
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.18.1 --activate
-          pnpm --version
+      - name: Install pnpm (global via npm)
+        run: npm i -g pnpm@10 && pnpm -v
 
       - name: Approve pnpm builds (Tailwind/Sharp/etc.)
         run: pnpm approve-builds --all
