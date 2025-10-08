@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
+      HYGRAPH_ENDPOINT: ${{ secrets.HYGRAPH_ENDPOINT }} # only needed if your build fetches at build time
 
     steps:
       - name: Checkout
@@ -22,13 +23,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: "pnpm"
+          # deliberately NOT using cache: 'pnpm' to avoid pre-pnpm timing issues
 
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
-
-      - name: Approve pnpm builds (Tailwind/Sharp/etc.)
-        run: pnpm approve-builds --all
+      # ✅ This is the same approach that worked in your minimal run
+      - name: Install pnpm (global via npm)
+        run: npm i -g pnpm@10 && pnpm -v && command -v pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
