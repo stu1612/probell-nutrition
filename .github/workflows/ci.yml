@@ -29,13 +29,6 @@ jobs:
       - name: Install pnpm (global via npm)
         run: npm i -g pnpm@10 && pnpm -v && command -v pnpm
 
-      # optional: quick sanity step so we can *see* this executed in logs
-      - name: Echo step order
-        run: echo "pnpm is installed; proceeding to approve builds and install deps"
-
-      - name: Approve pnpm builds (Tailwind/Sharp/etc.)
-        run: pnpm approve-builds --all
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
