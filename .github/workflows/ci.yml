@@ -13,9 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
-      # If your build fetches from Hygraph at build time, add this secret in GitHub repo settings.
-      HYGRAPH_ENDPOINT: ${{ secrets.HYGRAPH_ENDPOINT }}
-      # HYGRAPH_TOKEN: ${{ secrets.HYGRAPH_TOKEN }} # only if needed
+      HYGRAPH_ENDPOINT: ${{ secrets.HYGRAPH_ENDPOINT }} # optional but useful if you fetch at build
 
     steps:
       - name: Checkout
@@ -32,9 +30,6 @@ jobs:
         with:
           version: 10
           run_install: false
-
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
 
       - name: Approve pnpm builds (Tailwind/Sharp/etc.)
         run: pnpm approve-builds --all
