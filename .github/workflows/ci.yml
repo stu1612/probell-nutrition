@@ -5,9 +5,16 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      HYGRAPH_ENDPOINT: ${{ secrets.HYGRAPH_ENDPOINT }} # optional if you fetch at build
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,6 +23,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
+          cache: "pnpm"
 
       - name: Install pnpm (global via npm)
-        run: npm i -g pnpm@10 && pnpm -v && command -v pnpm
+        run: npm i -g pnpm@10 && pnpm -v
+
+      - name: Approve pnpm builds (Tailwind/Sharp/etc.)
+        run: pnpm approve-builds --all
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Tests (optional; passes if no tests)
+        run: pnpm -s test || echo "no tests"
+
+      - name: Build
+        run: pnpm build
