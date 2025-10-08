@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
-      HYGRAPH_ENDPOINT: ${{ secrets.HYGRAPH_ENDPOINT }} # optional if you fetch at build
+      HYGRAPH_ENDPOINT: ${{ secrets.HYGRAPH_ENDPOINT }} # only needed if your build fetches at build time
 
     steps:
       - name: Checkout
@@ -23,10 +23,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: "pnpm"
+          # deliberately NOT using cache: 'pnpm' to avoid pre-pnpm timing issues
 
+      # ✅ This is the same approach that worked in your minimal run
       - name: Install pnpm (global via npm)
-        run: npm i -g pnpm@10 && pnpm -v
+        run: npm i -g pnpm@10 && pnpm -v && command -v pnpm
+
+      # optional: quick sanity step so we can *see* this executed in logs
+      - name: Echo step order
+        run: echo "pnpm is installed; proceeding to approve builds and install deps"
 
       - name: Approve pnpm builds (Tailwind/Sharp/etc.)
         run: pnpm approve-builds --all
