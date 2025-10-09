@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import Hero from "./components/hero/Hero";
+
 export default async function Home() {
   return (
     <main>
@@ -8,6 +10,9 @@ export default async function Home() {
         <Link href={"/products"}>Products</Link>
         <Link href={"/disclaimer"}>Disclaimer</Link>
       </nav>
+      <div>
+        <Hero />
+      </div>
     </main>
   );
 }

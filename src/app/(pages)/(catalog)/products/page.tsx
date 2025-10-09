@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { hygraph } from "@/lib/hygraph";
-import { PROMO_PRODUCTS } from "@/lib/queries/products";
+import { PROMO_PRODUCTS } from "@/lib/queries";
 import { PromoProductsResult } from "@/types/hygraph";
 
 export const revalidate = 300; // ISR refresh every 5 min
