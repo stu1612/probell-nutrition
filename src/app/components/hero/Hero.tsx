@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { hygraph } from "@/lib/hygraph";
 import { HERO_BLOCK } from "@/lib/queries";
 import { HeroBlockResult } from "./types";
