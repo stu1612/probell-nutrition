@@ -1,11 +1,10 @@
 import Link from "next/link";
 
-import Hero from "./components/hero/Hero";
+import Hero from "./components/hero/hero";
 
 export default async function Home() {
   return (
     <main>
-      <h1>Probell Home Page</h1>
       <nav>
         <Link href={"/products"}>Products</Link>
         <Link href={"/disclaimer"}>Disclaimer</Link>
