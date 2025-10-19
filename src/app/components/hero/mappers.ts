@@ -18,14 +18,11 @@ export type HeroViewModel = {
   cta: HeadingBlock["cta"] | null;
   primaryLayout: string | null;
   secondaryLayout: string | null;
-  decorations: {
-    primary: boolean;
-    secondary: boolean;
-  };
+  decorations: { primary: boolean; secondary: boolean };
 };
 
 export function toHeroVM(display: DisplayBlock): HeroViewModel {
-  const heading = display.heading ?? ({} as HeadingBlock);
+  const heading = (display.heading ?? {}) as HeadingBlock;
 
   const title = isNonEmpty(heading.title) ? heading.title! : null;
   const subtitle = isNonEmpty(heading.subtitle) ? heading.subtitle! : null;
@@ -33,22 +30,50 @@ export function toHeroVM(display: DisplayBlock): HeroViewModel {
     ? heading.description!
     : null;
 
-  const mediaType = normalizeMediaType(display.mediaType ?? null);
+  const hasPrimaryUrl = !!display.mediaPrimary?.url;
+  const hasSecondaryUrl = !!display.mediaSecondary?.url;
 
-  const primary = imageProps(display.mediaPrimary, title ?? "");
-  const secondary = display.mediaSecondary
-    ? imageProps(display.mediaSecondary, title ?? "")
+  // Guard: if no media URLs at all, treat as no media
+  const mediaType: MediaTypeEnum | null =
+    hasPrimaryUrl || hasSecondaryUrl
+      ? normalizeMediaType(display.mediaType ?? null)
+      : null;
+
+  // Primary image (simple fallback alt to title or brand)
+  const primaryBase = imageProps(
+    display.mediaPrimary,
+    title ?? "Probell Nutrition brand image"
+  );
+  const primary = {
+    ...primaryBase,
+    alt: display.mediaPrimaryAlt ?? primaryBase.alt,
+  };
+
+  // Secondary image (empty alt if decorative)
+  const secondaryBase = hasSecondaryUrl
+    ? imageProps(
+        display.mediaSecondary,
+        title ?? "Probell Nutrition brand image"
+      )
     : null;
+
+  const secondary =
+    secondaryBase &&
+    ({
+      ...secondaryBase,
+      alt:
+        display.mediaSecondaryDecoration === true
+          ? "" // decorative: screen readers ignore
+          : display.mediaSecondaryAlt ?? secondaryBase.alt,
+    } as const);
 
   return {
     title,
     subtitle,
     description,
     mediaType,
-    primary: { ...primary, alt: display.mediaPrimaryAlt ?? primary.alt },
-    secondary: secondary
-      ? { ...secondary, alt: display.mediaSecondaryAlt ?? secondary.alt }
-      : null,
+    primary,
+    secondary: secondary ?? null,
     cta: heading.cta ?? display.cta ?? null,
     primaryLayout: display.primaryImageLayout ?? null,
     secondaryLayout: display.secondaryImageLayout ?? null,

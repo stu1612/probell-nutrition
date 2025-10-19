@@ -16,6 +16,6 @@ export function imageProps(asset?: Asset | null, fallbackAlt?: string) {
   const url = asset?.url ?? "";
   const width = asset?.width ?? 1200;
   const height = asset?.height ?? 630;
-  const alt = fallbackAlt ?? "";
+  const alt = fallbackAlt || "Probell Nutrition brand image";
   return { url, width, height, alt };
 }
