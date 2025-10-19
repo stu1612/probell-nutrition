@@ -16,6 +16,8 @@ export async function hygraph<T>({
   const endpoint = process.env.HYGRAPH_ENDPOINT;
   if (!endpoint) throw new Error("Missing HYGRAPH_ENDPOINT in env");
 
+  const { CMS_REVALIDATE, CMS_CACHE_DEFAULT } = await import("./config");
+
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {
@@ -25,8 +27,8 @@ export async function hygraph<T>({
         : {}),
     },
     body: JSON.stringify({ query, variables }),
-    cache,
-    next,
+    cache: cache ?? CMS_CACHE_DEFAULT,
+    next: { revalidate: next?.revalidate ?? CMS_REVALIDATE },
   });
 
   if (!res.ok) {
