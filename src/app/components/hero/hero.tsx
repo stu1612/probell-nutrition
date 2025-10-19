@@ -1,9 +1,16 @@
+// next
 import Image from "next/image";
+
+// libs
 import { hygraph } from "@/lib/hygraph";
+
+// internal libs (api, queries, uitls, enums, types)
 import { HERO_BLOCK } from "@/lib/queries";
 import type { HeroBlockResult } from "./types";
 import { toHeroVM } from "./mappers";
 import { MediaTypeEnum } from "@/types/enums";
+
+// components
 import SectionLayout from "../sectionLayout/sectionLayout";
 import AppLink from "../globals/appLink";
 

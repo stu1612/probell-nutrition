@@ -1,3 +1,4 @@
+// internal libs (api, queries, uitls, enums, types)
 import { SectionBase } from "@/types/components";
 import { spacingToClass } from "./helpers";
 
