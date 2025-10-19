@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import Hero from "./components/hero/page";
+import Hero from "./components/hero/hero";
 
 export default async function Home() {
   return (

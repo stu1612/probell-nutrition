@@ -3,8 +3,8 @@ import { hygraph } from "@/lib/hygraph";
 import { HERO_BLOCK } from "@/lib/queries";
 import type { HeroBlockResult } from "./types";
 import { toHeroVM } from "./mappers";
-import { MediaTypeEnum, ButtonVariantEnum } from "@/types/enums";
-import SectionLayout from "../sectionLayout/page";
+import { MediaTypeEnum } from "@/types/enums";
+import SectionLayout from "../sectionLayout/sectionLayout";
 import AppLink from "../globals/appLink";
 
 export default async function Hero() {
