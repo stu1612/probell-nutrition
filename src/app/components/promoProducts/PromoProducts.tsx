@@ -1,9 +1,11 @@
+// next
+import Image from "next/image";
+
+// internal libs (api, queries, uitls, enums, types)
 import { hygraph } from "@/lib/hygraph";
 import { PROMO_PRODUCTS } from "@/lib/queries";
 import { PromoBlock } from "./types";
 import { toPromoVM } from "./mappers";
-
-import Image from "next/image";
 
 // components
 import SectionLayout from "../sectionLayout/sectionLayout";

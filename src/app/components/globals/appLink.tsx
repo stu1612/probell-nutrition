@@ -1,6 +1,11 @@
-import { Cta } from "@/types/components";
+// next
 import Link from "next/link";
+
+// internal libs (api, queries, uitls, enums, types)
 import { ButtonVariantEnum } from "@/types/enums";
+import { Cta } from "@/types/components";
+
+// npm
 import clsx from "clsx";
 
 type AppLinkProps = {

@@ -1,9 +1,12 @@
 // internal libs (api, queries, uitls, enums, types)
-import { SectionBase } from "@/types/components";
 import { spacingToClass } from "./helpers";
-
-import clsx from "clsx";
 import { isNonEmpty } from "../hero/helpers";
+
+// components
+import { SectionBase } from "@/types/components";
+
+// npm
+import clsx from "clsx";
 
 type LayoutProps = {
   children: React.ReactNode;
