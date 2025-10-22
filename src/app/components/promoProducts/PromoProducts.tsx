@@ -3,6 +3,8 @@ import { PROMO_PRODUCTS } from "@/lib/queries";
 import { PromoBlock } from "./types";
 import { toPromoVM } from "./mappers";
 
+import Image from "next/image";
+
 // components
 import SectionLayout from "../sectionLayout/sectionLayout";
 
@@ -14,11 +16,37 @@ export default async function PromoProducts() {
 
   const vm = toPromoVM(carouselSections[0]);
 
-  console.log(vm.layout);
-
   return (
     <SectionLayout layout={vm.layout} heading={vm.layout?.sectionHeading}>
-      <p>Stuff</p>
+      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+        {vm.items.map((item) => (
+          <article
+            key={item.id}
+            className="rounded-2xl p-4 shadow-sm ring-1 ring-black/5"
+          >
+            <a
+              href={item.slug ? `/product/${item.slug}` : "#"}
+              className="block"
+            >
+              <div className="aspect-square overflow-hidden rounded-xl">
+                <Image
+                  src={item.image.url}
+                  width={item.image.width}
+                  height={item.image.height}
+                  alt={item.image.alt}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="mt-4">
+                <h3>{item.title ?? "Untitled Product"}</h3>
+                {item.excerpt && (
+                  <p className="text-muted-foreground">{item.excerpt}</p>
+                )}
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
     </SectionLayout>
   );
 }
