@@ -73,3 +73,11 @@ export type SectionBase = {
   internalLabel?: string | null;
   sectionHeading?: string | null;
 };
+
+export type ProductCard = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt?: string | null;
+  productImage?: { url: string } | null;
+};

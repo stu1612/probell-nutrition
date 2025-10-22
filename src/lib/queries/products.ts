@@ -1,8 +1,8 @@
-export const PROMO_PRODUCTS = `
-  query PromoFromProductLists($limit: Int = 3) {
+export const PRODUCTS = `
+  query ProductLists() {
     productLists(stage: PUBLISHED, first: 1) {
       id
-      product(where: { isAvailable: true, isCarousel: true }, first: $limit) {
+      product(where: { isAvailable: true }, first: $limit) {
         id
         title
         slug

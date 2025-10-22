@@ -11,8 +11,8 @@ import { toHeroVM } from "./mappers";
 import { MediaTypeEnum } from "@/types/enums";
 
 // components
-import SectionLayout from "../sectionLayout/sectionLayout";
 import AppLink from "../globals/appLink";
+import SectionLayout from "../sectionLayout/sectionLayout";
 
 export default async function Hero() {
   const { heroes } = await hygraph<HeroBlockResult>({

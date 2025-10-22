@@ -1,23 +1,23 @@
 import Image from "next/image";
 import { hygraph } from "@/lib/hygraph";
 import { PROMO_PRODUCTS } from "@/lib/queries";
-import { PromoProductsResult } from "@/types/hygraph";
+// import { PromoProductsResult } from "@/types/hygraph";
 
 export const revalidate = 300; // ISR refresh every 5 min
 
 export default async function ProductsPage() {
-  const data = await hygraph<PromoProductsResult>({
-    query: PROMO_PRODUCTS,
-    variables: { limit: 3 },
-    next: { revalidate },
-  });
+  // const data = await hygraph<PromoProductsResult>({
+  //   query: PROMO_PRODUCTS,
+  //   variables: { limit: 3 },
+  //   next: { revalidate },
+  // });
 
-  const items = data.productLists[0]?.product ?? [];
+  // const items = data.productLists[0]?.product ?? [];
 
   return (
     <main className="mx-auto max-w-6xl p-6">
       <h1 className="mb-6 text-2xl font-semibold">Promo Products</h1>
-      <section className="grid gap-6 sm:grid-cols-3">
+      {/* <section className="grid gap-6 sm:grid-cols-3">
         {items.map((p) => (
           <a
             key={p.id}
@@ -39,7 +39,7 @@ export default async function ProductsPage() {
             {p.excerpt && <p className="text-sm text-white/70">{p.excerpt}</p>}
           </a>
         ))}
-      </section>
+      </section> */}
     </main>
   );
 }
