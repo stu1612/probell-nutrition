@@ -1,6 +1,7 @@
 import { hygraph } from "@/lib/hygraph";
 import { PROMO_PRODUCTS } from "@/lib/queries";
 import { PromoBlock } from "./types";
+import { toPromoVM } from "./mappers";
 
 // components
 import SectionLayout from "../sectionLayout/sectionLayout";
@@ -11,16 +12,12 @@ export default async function PromoProducts() {
     variables: { limit: 3, stage: "PUBLISHED" },
   });
 
-  const data = carouselSections[0];
+  const vm = toPromoVM(carouselSections[0]);
 
-  const layout = data?.layout;
-  const productItems = data?.productList;
-
-  const list = productItems?.product;
-  console.log(list);
+  console.log(vm.layout);
 
   return (
-    <SectionLayout layout={layout}>
+    <SectionLayout layout={vm.layout} heading={vm.layout?.sectionHeading}>
       <p>Stuff</p>
     </SectionLayout>
   );
