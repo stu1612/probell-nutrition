@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import Navbar from "./components/nav/Navbar";
+import Footer from "./components/footer/Footer";
 
 const fontHeading = Bebas_Neue({
   variable: "--font-heading",
@@ -28,7 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fontHeading.variable} ${fontSans.variable}`}>
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

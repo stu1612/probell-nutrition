@@ -19,13 +19,16 @@ export default function AppLink({ cta, className }: AppLinkProps) {
   const ariaLabel =
     cta.ariaLabel && cta.ariaLabel !== cta.label ? cta.ariaLabel : undefined;
 
+  // className =
+  //   "rounded-lg border border-white px-5 py-3 text-center text-base font-medium text-white hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-400";
   // --- Base style ---
   const base =
-    "inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition-colors duration-200";
+    "inline-flex items-center justify-center rounded-lg px-5 py-3 text-base font-medium transition-colors duration-200";
 
   // --- Variant logic from your enum ---
   const variants: Record<ButtonVariantEnum, string> = {
-    [ButtonVariantEnum.PRIMARY]: "bg-gold hover:bg-black hover:text-white",
+    [ButtonVariantEnum.PRIMARY]:
+      "bg-gold border text-black hover:bg-transparent hover:text-white hover:border-gold",
     [ButtonVariantEnum.SECONDARY]:
       "bg-[var(--color-off-white)] text-black hover:bg-gray-200",
     [ButtonVariantEnum.OUTLINE]:

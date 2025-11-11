@@ -8,7 +8,7 @@
   --color-red: #c8102e;
   --color-gold: #c4a962;
 
-  --fs-h1: clamp(2.5rem, 5vw, 4.5rem);
+  --fs-h1: clamp(2.5rem, 8vw, 8rem);
   --fs-h2: clamp(1.75rem, 3vw, 2.5rem);
   --fs-h3: clamp(1.25rem, 2vw, 1.75rem);
   --fs-body-lg: 1.125rem;
@@ -56,7 +56,7 @@ body {
 }
 
 main {
-  color: var(--color-black);
+  /* color: var(--color-black); */
 }
 
 ul[class],
@@ -121,6 +121,6 @@ h3 {
   font-size: var(--fs-h3);
 }
 
-p {
+/* p {
   font-size: var(--fs-body);
-}
+} */

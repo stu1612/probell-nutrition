@@ -19,36 +19,45 @@ export default async function PromoProducts() {
   const vm = toPromoVM(carouselSections[0]);
 
   return (
-    <SectionLayout layout={vm.layout} heading={vm.layout?.sectionHeading}>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-        {vm.items.map((item) => (
-          <article
-            key={item.id}
-            className="rounded-2xl p-4 shadow-sm ring-1 ring-black/5"
-          >
-            <a
-              href={item.slug ? `/product/${item.slug}` : "#"}
-              className="block"
+    <div
+      className="w-full h-full bg-center bg-no-repeat bg-gray-200 bg-blend-overlay bg-cover p-24"
+      style={{
+        backgroundImage: "url(/promo-product-wallpaper.jpg)",
+      }}
+    >
+      <SectionLayout layout={vm.layout} heading={vm.layout?.sectionHeading}>
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {vm.items.map((item) => (
+            <article
+              key={item.id}
+              className="rounded-2xl bg-gray-50 p-4 shadow-sm  hover:ring-2 hover:ring-red-500/40 hover:ring-offset-2"
             >
-              <div className="aspect-square overflow-hidden rounded-xl">
-                <Image
-                  src={item.image.url}
-                  width={item.image.width}
-                  height={item.image.height}
-                  alt={item.image.alt}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="mt-4">
-                <h3>{item.title ?? "Untitled Product"}</h3>
-                {item.excerpt && (
-                  <p className="text-muted-foreground">{item.excerpt}</p>
-                )}
-              </div>
-            </a>
-          </article>
-        ))}
-      </div>
-    </SectionLayout>
+              <a
+                href={item.slug ? `/product/${item.slug}` : "#"}
+                className="block"
+              >
+                <div className="aspect-square overflow-hidden rounded-xl ">
+                  <Image
+                    src={item.image.url}
+                    width={item.image.width}
+                    height={item.image.height}
+                    alt={item.image.alt}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="mt-4">
+                  <h3>{item.title ?? "Untitled Product"}</h3>
+                  {item.excerpt && (
+                    <p className="text-sm text-gray-500 text-muted-foreground leading-snug">
+                      {item.excerpt}
+                    </p>
+                  )}
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      </SectionLayout>
+    </div>
   );
 }
