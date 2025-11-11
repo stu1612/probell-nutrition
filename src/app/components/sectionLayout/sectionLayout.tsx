@@ -36,7 +36,13 @@ export default function SectionLayout({
 
   const content = (
     <div className={wrapperClasses}>
-      <h2 className="text-2xl font-semibold">{sectionHeading}</h2>
+      <h2
+        className="relative inline-block text-2xl text-slate-800 tracking-tight
+             after:absolute after:left-0 after:-bottom-1 after:h-1 after:w-full
+             after:bg-gradient-to-r after:from-red-600 after:to-sky-500"
+      >
+        {sectionHeading}
+      </h2>
       {children}
     </div>
   );

@@ -3,5 +3,5 @@ export default function CatalogLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <section className="mx-auto max-w-3xl p-6">{children}</section>;
+  return <section className="mx-auto max-w-8xl p-6">{children}</section>;
 }
