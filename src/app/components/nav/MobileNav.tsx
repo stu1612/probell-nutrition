@@ -1,73 +1,81 @@
-import {
-  Home,
-  Dumbbell,
-  Info,
-  ShoppingBag,
-  Phone,
-  ShieldCheck,
-} from "lucide-react";
-
+// react
+import { JSX } from "react";
 import Link from "next/link";
 
-type NavProps = {
-  open: boolean;
-  toggleHamburger: () => void;
+// internal libs (api, queries, uitls, enums, types)
+import { useNavStore } from "@/lib/stores/navStore";
+import { NavLink } from "./types";
+
+// npm
+import { Home, Weight, Info, ShoppingBag, Phone } from "lucide-react";
+
+type MobileNavProps = {
+  primary: NavLink[];
+  secondary: NavLink[];
+  pathname: string;
 };
 
-export default function MobileNav({ open, toggleHamburger }: NavProps) {
+export default function MobileNav({ primary, secondary }: MobileNavProps) {
+  // stores
+  const open = useNavStore((s) => s.open);
+  const toggle = useNavStore((s) => s.toggle);
+
+  // properties
+  const iconMap: Record<string, JSX.Element> = {
+    Home: <Home className="w-4 h-4" />,
+    Products: <ShoppingBag className="w-4 h-4" />,
+    About: <Info className="w-4 h-4" />,
+    Kettlebell: <Weight className="w-4 h-4" />,
+    Contact: <Phone className="w-4 h-4" />,
+  };
+
+  const primaryLinks = primary.map((l) => {
+    const icon = iconMap[l.label] ?? null;
+
+    return (
+      <li key={l.id}>
+        <Link
+          href={l.href}
+          onClick={toggle}
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-700/70 hover:shadow-sm transition-all duration-150"
+        >
+          {icon}
+          <span>{l.label}</span>
+        </Link>
+      </li>
+    );
+  });
+
+  const secondaryLinks = secondary.length > 0 && (
+    <>
+      <li className="inline-block rounded-lg py-2 text-slate-300 text-sm font-black uppercase">
+        Info
+      </li>
+      {secondary.map((l) => (
+        <li key={l.id}>
+          <Link
+            href={l.href}
+            onClick={toggle}
+            className="block py-1 text-slate-300"
+          >
+            {l.label}
+          </Link>
+        </li>
+      ))}
+    </>
+  );
+
+  // safeguard
+  if (!open) return null;
+
+  // jsx
   return (
-    <div
-      className={`md:hidden overflow-hidden  transition-[max-height] duration-300 ease-out ${
-        open ? "h-auto" : "max-h-0"
-      }`}
-    >
-      <div className="py-3">
-        <ul className="flex flex-col gap-2 rounded-xl bg-slate-800/95 p-4 shadow-lg backdrop-blur-sm">
-          {[
-            {
-              href: "/",
-              label: "Home",
-              icon: <Home className="w-4 h-4" />,
-            },
-            {
-              href: "/products",
-              label: "Products",
-              icon: <ShoppingBag className="w-4 h-4" />,
-            },
-            {
-              href: "/about",
-              label: "About",
-              icon: <Info className="w-4 h-4" />,
-            },
-            {
-              href: "/contact",
-              label: "Contact",
-              icon: <Phone className="w-4 h-4" />,
-            },
-            {
-              href: "/kettlebell",
-              label: "The Kettlebell",
-              icon: <Dumbbell className="w-4 h-4" />,
-            },
-            {
-              href: "/legal",
-              label: "Legal",
-              icon: <ShieldCheck className="w-4 h-4" />,
-            },
-          ].map(({ href, label, icon }) => (
-            <li key={href}>
-              <Link
-                href={href}
-                onClick={() => toggleHamburger()}
-                className="flex items-center gap-3 rounded-lg px-4 py-3 text-white hover:bg-slate-700/70 hover:shadow-md transition-all duration-200"
-              >
-                {icon}
-                <span>{label}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="md:hidden border-t border-slate-700 bg-slate-800 p-4 rounded-2xl">
+      <ul className="flex flex-col gap-3">
+        {primaryLinks}
+
+        {secondaryLinks}
+      </ul>
     </div>
   );
 }

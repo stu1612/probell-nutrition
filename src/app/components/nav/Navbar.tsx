@@ -1,53 +1,26 @@
-"use client";
+// internal libs (api, queries, uitls, enums, types)
+import { hygraph } from "@/lib/hygraph";
+import { NAVBAR_BLOCK } from "@/lib/queries";
+import { CMS_NavItem } from "./types";
+import { toNavVM } from "./mappers";
 
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+// compoenents
+import NavbarClient from "./NavbarClient";
 
-import DesktopNav from "./DesktopNav";
-import MobileNav from "./MobileNav";
+type CMS_Navbar = {
+  id: string;
+  navItems: CMS_NavItem[];
+};
 
-export default function Navbar() {
-  // state
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+export default async function Navbar() {
+  const { navbars } = await hygraph<{ navbars: CMS_Navbar[] }>({
+    query: NAVBAR_BLOCK,
+    variables: { stage: "PUBLISHED" },
+  });
 
   // properties
-  const pathname = usePathname();
+  const navbar = navbars?.[0];
+  const vm = toNavVM(navbar?.navItems ?? []);
 
-  // functions
-  useEffect(() => {
-    const handleScroll = () => {
-      const triggerHeight = window.innerHeight * 0.3;
-      setScrolled(window.scrollY > triggerHeight);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const toggleHamburger = () => {
-    setOpen((v) => !v);
-  };
-
-  return (
-    <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-700 ease-in-out ${
-        pathname === "/"
-          ? scrolled
-            ? "bg-slate-800/70 backdrop-blur-md shadow-sm"
-            : "bg-transparent"
-          : "bg-slate-800/70 backdrop-blur-md shadow-sm"
-      }`}
-    >
-      <div className="mx-auto max-w-6xl px-6 py-2 md:py-0 md:px-2 lg:px-0 ">
-        <DesktopNav
-          open={open}
-          scrolled={scrolled}
-          toggleHamburger={toggleHamburger}
-        />
-        <MobileNav open={open} toggleHamburger={toggleHamburger} />
-      </div>
-    </nav>
-  );
+  return <NavbarClient vm={vm} />;
 }
