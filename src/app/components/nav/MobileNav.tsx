@@ -1,5 +1,6 @@
 import { Home, Weight, Info, ShoppingBag, Phone } from "lucide-react";
 
+import { useNavStore } from "@/lib/stores/navStore";
 import Link from "next/link";
 import { NavLink } from "./types";
 import { JSX } from "react";
@@ -7,20 +8,16 @@ import { JSX } from "react";
 type MobileNavProps = {
   primary: NavLink[];
   secondary: NavLink[];
-  open: boolean;
-  toggleHamburger: () => void;
   pathname: string;
 };
 
-export default function MobileNav({
-  primary,
-  secondary,
-  open,
-  toggleHamburger,
-  pathname,
-}: MobileNavProps) {
-  // properties
+export default function MobileNav({ primary, secondary }: MobileNavProps) {
+  const open = useNavStore((s) => s.open);
+  const toggle = useNavStore((s) => s.toggle);
 
+  if (!open) return null;
+
+  // properties
   const iconMap: Record<string, JSX.Element> = {
     Home: <Home className="w-4 h-4" />,
     Products: <ShoppingBag className="w-4 h-4" />,
@@ -36,7 +33,7 @@ export default function MobileNav({
       <li key={l.id}>
         <Link
           href={l.href}
-          onClick={toggleHamburger}
+          onClick={toggle}
           className="flex items-center gap-3 rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-700/70 hover:shadow-sm transition-all duration-150"
         >
           {icon}
@@ -55,7 +52,7 @@ export default function MobileNav({
         <li key={l.id}>
           <Link
             href={l.href}
-            onClick={toggleHamburger}
+            onClick={toggle}
             className="block py-1 text-slate-300"
           >
             {l.label}

@@ -9,6 +9,8 @@ import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 import { NavVM } from "./types";
 
+import { useNavStore } from "@/lib/stores/navStore";
+
 type NavClientProps = {
   vm: NavVM;
 };
@@ -18,8 +20,7 @@ export default function NavbarClient({ vm }: NavClientProps) {
   const pathname = usePathname();
 
   // state
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const { scrolled, setScrolled } = useNavStore();
 
   // voids
   useEffect(() => {
@@ -41,23 +42,13 @@ export default function NavbarClient({ vm }: NavClientProps) {
       : "bg-slate-800/70 backdrop-blur-md shadow-sm"
   );
 
-  const toggleHamburger = () => setOpen((v) => !v);
-
   return (
     <nav className={wrapperClasses}>
       <div className="mx-auto max-w-6xl px-6 py-2 md:py-0 md:px-2 lg:px-0">
-        <DesktopNav
-          links={vm.primary}
-          open={open}
-          scrolled={scrolled}
-          toggleHamburger={toggleHamburger}
-          pathname={pathname ?? "/"}
-        />
+        <DesktopNav links={vm.primary} pathname={pathname ?? "/"} />
         <MobileNav
           primary={vm.primary}
           secondary={vm.secondary}
-          open={open}
-          toggleHamburger={toggleHamburger}
           pathname={pathname ?? "/"}
         />
       </div>
