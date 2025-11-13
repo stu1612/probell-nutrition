@@ -1,25 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
+import { NavLink } from "./types";
+import clsx from "clsx";
 
-import { usePathname } from "next/navigation";
-
-type NavProps = {
+type DesktopNavProps = {
+  links: NavLink[];
   open: boolean;
   scrolled: boolean;
   toggleHamburger: () => void;
+  pathname: string;
 };
 
 export default function DesktopNav({
+  links,
   open,
   scrolled,
   toggleHamburger,
-}: NavProps) {
-  // properties
-  const pathname = usePathname();
-
+  pathname,
+}: DesktopNavProps) {
+  console.log("links ", links);
   return (
     <div className="grid h-auto grid-cols-2 items-center">
-      {/* Logo */}
       <Link href="/" className="justify-self-start">
         <div className="relative h-16 w-24 md:h-18 md:w-28 aspect-square">
           <Image
@@ -32,20 +33,37 @@ export default function DesktopNav({
         </div>
       </Link>
 
-      {/* Center: Desktop nav */}
       <div className="hidden items-center justify-end gap-8 md:flex px-4 mix-blend-difference text-white font-medium">
-        {["Home", "Products", "About", "Contact"].map((item) => (
-          <Link
-            key={item}
-            href={`/${item.toLowerCase()}`}
-            className="transition-colors duration-300 hover:text-red-400"
-          >
-            {item}
-          </Link>
-        ))}
+        <ul className="flex items-center gap-6">
+          {links?.map((l) => {
+            const active =
+              !l.external && l.href !== "/" && pathname.startsWith(l.href);
+
+            return (
+              <li key={l.id}>
+                <Link
+                  href={l.href}
+                  target={l.external ? "_blank" : undefined}
+                  rel={l.external ? "noopener noreferrer" : undefined}
+                  className={clsx(
+                    "relative text-medium font-medium text-slate-200 hover:text-white transition-colors",
+                    active && "text-white"
+                  )}
+                >
+                  {l.label}
+                  <span
+                    className={clsx(
+                      "absolute left-0 -bottom-1 h-0.5 w-full bg-gradient-to-r from-red-300 to-sky-400 origin-left transition-transform",
+                      active ? "scale-x-100" : "scale-x-0"
+                    )}
+                  />
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
-      {/* Mobile hamburger */}
       <div className="justify-self-end md:hidden">
         <button
           type="button"
@@ -60,7 +78,6 @@ export default function DesktopNav({
               : "bg-slate-700 text-white hover:bg-slate-600"
           }`}
         >
-          {/* Icon */}
           <svg
             className="h-5 w-5"
             viewBox="0 0 24 24"
