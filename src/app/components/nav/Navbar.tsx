@@ -1,9 +1,11 @@
+// internal libs (api, queries, uitls, enums, types)
 import { hygraph } from "@/lib/hygraph";
 import { NAVBAR_BLOCK } from "@/lib/queries";
-import NavbarClient from "./NavbarClient";
 import { CMS_NavItem } from "./types";
-
 import { toNavVM } from "./mappers";
+
+// compoenents
+import NavbarClient from "./NavbarClient";
 
 type CMS_Navbar = {
   id: string;
@@ -16,6 +18,7 @@ export default async function Navbar() {
     variables: { stage: "PUBLISHED" },
   });
 
+  // properties
   const navbar = navbars?.[0];
   const vm = toNavVM(navbar?.navItems ?? []);
 

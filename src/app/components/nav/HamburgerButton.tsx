@@ -1,15 +1,21 @@
 "use client";
 
-import { useNavStore } from "@/lib/stores/navStore";
+// next
 import { usePathname } from "next/navigation";
 
+// internal libs (api, queries, uitls, enums, types)
+import { useNavStore } from "@/lib/stores/navStore";
+
 export default function HamburgerButton() {
+  // stores
   const toggle = useNavStore((s) => s.toggle);
   const open = useNavStore((s) => s.open);
   const scrolled = useNavStore();
 
+  // properties
   const pathname = usePathname();
   const isHome = pathname === "/";
+
   return (
     <button
       type="button"

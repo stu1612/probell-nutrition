@@ -1,9 +1,13 @@
-import { Home, Weight, Info, ShoppingBag, Phone } from "lucide-react";
-
-import { useNavStore } from "@/lib/stores/navStore";
-import Link from "next/link";
-import { NavLink } from "./types";
+// react
 import { JSX } from "react";
+import Link from "next/link";
+
+// internal libs (api, queries, uitls, enums, types)
+import { useNavStore } from "@/lib/stores/navStore";
+import { NavLink } from "./types";
+
+// npm
+import { Home, Weight, Info, ShoppingBag, Phone } from "lucide-react";
 
 type MobileNavProps = {
   primary: NavLink[];
@@ -12,10 +16,9 @@ type MobileNavProps = {
 };
 
 export default function MobileNav({ primary, secondary }: MobileNavProps) {
+  // stores
   const open = useNavStore((s) => s.open);
   const toggle = useNavStore((s) => s.toggle);
-
-  if (!open) return null;
 
   // properties
   const iconMap: Record<string, JSX.Element> = {

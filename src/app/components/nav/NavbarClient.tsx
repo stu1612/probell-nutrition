@@ -1,15 +1,19 @@
-// app/(catalog)/navbar/navbar.client.tsx  (Client Component)
 "use client";
 
-import { useState, useEffect } from "react";
-
+// react
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+
+// internal libs (api, queries, uitls, enums, types)
+import { NavVM } from "./types";
+import { useNavStore } from "@/lib/stores/navStore";
+
+// npm
 import clsx from "clsx";
+
+// compoenents
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
-import { NavVM } from "./types";
-
-import { useNavStore } from "@/lib/stores/navStore";
 
 type NavClientProps = {
   vm: NavVM;
@@ -19,7 +23,7 @@ export default function NavbarClient({ vm }: NavClientProps) {
   // properties
   const pathname = usePathname();
 
-  // state
+  // stores
   const { scrolled, setScrolled } = useNavStore();
 
   // voids
@@ -33,6 +37,7 @@ export default function NavbarClient({ vm }: NavClientProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // properties
   const wrapperClasses = clsx(
     "fixed inset-x-0 top-0 z-50 transition-all duration-700 ease-in-out",
     pathname === "/"

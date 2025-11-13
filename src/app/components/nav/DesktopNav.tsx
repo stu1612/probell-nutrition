@@ -1,10 +1,16 @@
+// next
 import Image from "next/image";
 import Link from "next/link";
-import { NavLink } from "./types";
-import clsx from "clsx";
-import HamburgerButton from "./HamburgerButton";
 
+// internal libs (api, queries, uitls, enums, types)
+import { NavLink } from "./types";
 import { useNavStore } from "@/lib/stores/navStore";
+
+//npm
+import clsx from "clsx";
+
+// components
+import HamburgerButton from "./HamburgerButton";
 
 type DesktopNavProps = {
   links: NavLink[];
@@ -12,6 +18,7 @@ type DesktopNavProps = {
 };
 
 export default function DesktopNav({ links, pathname }: DesktopNavProps) {
+  // stores
   const close = useNavStore((s) => s.close);
 
   return (
