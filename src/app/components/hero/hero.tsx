@@ -1,14 +1,8 @@
-// next
-// import Image from "next/image";
-
-// libs
-import { hygraph } from "@/lib/hygraph";
-
 // internal libs (api, queries, uitls, enums, types)
 import { HERO_BLOCK } from "@/lib/queries";
 import type { HeroBlockResult } from "./types";
 import { toHeroVM } from "./mappers";
-// import { MediaTypeEnum } from "@/types/enums";
+import { hygraph } from "@/lib/hygraph";
 
 // components
 import AppLink from "../globals/appLink";
@@ -19,6 +13,7 @@ export default async function Hero() {
     variables: { stage: "PUBLISHED" },
   });
 
+  // properties
   const hero = heroes?.[0];
   const layout = hero?.layout;
 
