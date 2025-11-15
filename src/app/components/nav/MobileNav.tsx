@@ -1,69 +1,18 @@
 // react
-import { JSX } from "react";
 import Link from "next/link";
 
 // internal libs (api, queries, uitls, enums, types)
 import { useNavStore } from "@/lib/stores/navStore";
-import { NavLink } from "./types";
+import { LinkTypeProps, NavigationProps } from "./types";
 
-// npm
-import { Home, Weight, Info, ShoppingBag, Phone } from "lucide-react";
-
-type MobileNavProps = {
-  primary: NavLink[];
-  secondary: NavLink[];
-  pathname: string;
-};
-
-export default function MobileNav({ primary, secondary }: MobileNavProps) {
+export default function MobileNav({ links }: NavigationProps) {
   // stores
   const open = useNavStore((s) => s.open);
   const toggle = useNavStore((s) => s.toggle);
 
   // properties
-  const iconMap: Record<string, JSX.Element> = {
-    Home: <Home className="w-4 h-4" />,
-    Products: <ShoppingBag className="w-4 h-4" />,
-    About: <Info className="w-4 h-4" />,
-    Kettlebell: <Weight className="w-4 h-4" />,
-    Contact: <Phone className="w-4 h-4" />,
-  };
-
-  const primaryLinks = primary.map((l) => {
-    const icon = iconMap[l.label] ?? null;
-
-    return (
-      <li key={l.id}>
-        <Link
-          href={l.href}
-          onClick={toggle}
-          className="flex items-center gap-3 rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-700/70 hover:shadow-sm transition-all duration-150"
-        >
-          {icon}
-          <span>{l.label}</span>
-        </Link>
-      </li>
-    );
-  });
-
-  const secondaryLinks = secondary.length > 0 && (
-    <>
-      <li className="inline-block rounded-lg py-2 text-slate-300 text-sm font-black uppercase">
-        Info
-      </li>
-      {secondary.map((l) => (
-        <li key={l.id}>
-          <Link
-            href={l.href}
-            onClick={toggle}
-            className="block py-1 text-slate-300"
-          >
-            {l.label}
-          </Link>
-        </li>
-      ))}
-    </>
-  );
+  const primaryLinks = links.filter((l) => l.type === "primary");
+  const secondaryLinks = links.filter((l) => l.type === "secondary");
 
   // safeguard
   if (!open) return null;
@@ -72,10 +21,38 @@ export default function MobileNav({ primary, secondary }: MobileNavProps) {
   return (
     <div className="md:hidden border-t border-slate-700 bg-slate-800 p-4 rounded-2xl">
       <ul className="flex flex-col gap-3">
-        {primaryLinks}
-
-        {secondaryLinks}
+        <LinkType links={primaryLinks} />
+        <li className="inline-block rounded-lg py-2 text-slate-300 text-sm font-black uppercase">
+          Info
+        </li>
+        <LinkType links={secondaryLinks} />
       </ul>
     </div>
   );
 }
+
+const LinkType = ({ links }: LinkTypeProps) => {
+  // stores
+  const toggle = useNavStore((s) => s.toggle);
+
+  return (
+    <>
+      {links.map((l) => {
+        const Icon = l.icon;
+
+        return (
+          <li key={l.id}>
+            <Link
+              href={l.href}
+              onClick={toggle}
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-slate-100 hover:bg-slate-700/70 hover:shadow-sm transition-all duration-150"
+            >
+              {Icon && <Icon className="w-4 h-4" />}
+              <span>{l.label}</span>
+            </Link>
+          </li>
+        );
+      })}
+    </>
+  );
+};

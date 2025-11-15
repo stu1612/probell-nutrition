@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 // internal libs (api, queries, uitls, enums, types)
-import { NavLink } from "./types";
 import { useNavStore } from "@/lib/stores/navStore";
+import { NavigationProps } from "./types";
 
 //npm
 import clsx from "clsx";
@@ -12,12 +12,7 @@ import clsx from "clsx";
 // components
 import HamburgerButton from "./HamburgerButton";
 
-type DesktopNavProps = {
-  links: NavLink[];
-  pathname: string;
-};
-
-export default function DesktopNav({ links, pathname }: DesktopNavProps) {
+export default function DesktopNav({ links, pathname }: NavigationProps) {
   // stores
   const close = useNavStore((s) => s.close);
 
@@ -41,29 +36,30 @@ export default function DesktopNav({ links, pathname }: DesktopNavProps) {
       <div className="hidden items-center justify-end gap-8 md:flex px-4 mix-blend-difference text-white font-medium">
         <ul className="flex items-center gap-6">
           {links?.map((l) => {
-            const active =
-              !l.external && l.href !== "/" && pathname.startsWith(l.href);
+            const active = l.href !== "/" && pathname?.startsWith(l.href);
 
             return (
-              <li key={l.id}>
-                <Link
-                  href={l.href}
-                  target={l.external ? "_blank" : undefined}
-                  rel={l.external ? "noopener noreferrer" : undefined}
-                  className={clsx(
-                    "relative text-medium font-medium text-slate-200 hover:text-white transition-colors",
-                    active && "text-white"
-                  )}
-                >
-                  {l.label}
-                  <span
+              l.isDesktop && (
+                <li key={l.id}>
+                  <Link
+                    href={l.href}
+                    target={l.isExternal ? "_blank" : undefined}
+                    rel={l.isExternal ? "noopener noreferrer" : undefined}
                     className={clsx(
-                      "absolute left-0 -bottom-1 h-0.5 w-full bg-gradient-to-r from-red-300 to-sky-400 origin-left transition-transform",
-                      active ? "scale-x-100" : "scale-x-0"
+                      "relative text-medium font-medium text-slate-200 hover:text-white transition-colors",
+                      active && "text-white"
                     )}
-                  />
-                </Link>
-              </li>
+                  >
+                    {l.label}
+                    <span
+                      className={clsx(
+                        "absolute left-0 -bottom-1 h-0.5 w-full bg-gradient-to-r from-red-300 to-sky-400 origin-left transition-transform",
+                        active ? "scale-x-100" : "scale-x-0"
+                      )}
+                    />
+                  </Link>
+                </li>
+              )
             );
           })}
         </ul>

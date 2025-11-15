@@ -1,16 +1,16 @@
 import Image from "next/image";
+import { KETTLEBELL_CONTENT } from "@/app/constants/kettlebell";
 
 export default function Kettlebell() {
   return (
     <section
       className="relative w-full h-full md:h-lvh bg-center bg-cover"
       style={{
-        backgroundImage:
-          "url(/man-in-background-with-kettlebell-on-display.jpg)",
+        backgroundImage: "url(/kettlebell_swing.jpg)",
       }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-slate-900/60 md:bg-slate-900/50" />
+      <div className="absolute inset-0 bg-slate-900/60 md:bg-slate-900/70" />
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/25" />
@@ -21,7 +21,7 @@ export default function Kettlebell() {
             after:absolute after:left-0 after:-bottom-1 after:h-1 after:w-full
             after:bg-gradient-to-r after:from-red-600 after:to-sky-500"
         >
-          Where Strength Meets Design
+          {KETTLEBELL_CONTENT.title}
         </h2>
 
         <div className="mt-10 grid items-center gap-10 md:grid-cols-[minmax(260px,380px)_1fr]">
@@ -39,22 +39,9 @@ export default function Kettlebell() {
 
           <div className="text-white">
             <div className="text-xl max-w-2xl space-y-4 leading-relaxed">
-              <p>
-                Introducing the new Probell Kettlebell — where balance meets
-                power, and design drives performance. Built to push limits, one
-                rep at a time.
-              </p>
-              <p>
-                Every curve and contour is engineered for confident grip and
-                perfect balance through swings, presses, and pulls. Constructed
-                from high-grade materials, it stands up to the toughest training
-                — day after day.
-              </p>
-              <p>
-                Whether you’re building strength, endurance, or consistency, the
-                Probell Kettlebell unites design and power in one tool. Because
-                real progress deserves equipment made with intention.
-              </p>
+              {KETTLEBELL_CONTENT.excerpts.map((e, idx) => (
+                <p key={idx}>{e}</p>
+              ))}
             </div>
           </div>
         </div>
