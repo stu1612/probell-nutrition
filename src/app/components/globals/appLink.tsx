@@ -14,13 +14,13 @@ type AppLinkProps = {
 };
 
 export default function AppLink({ cta, className }: AppLinkProps) {
-  const href = cta.internalUrlLink ?? "#";
-  const isInternal = cta.isInternalLink;
+  const href = cta?.internalUrlLink ?? "#";
+  const isInternal = cta?.isInternalLink;
   const ariaLabel =
-    cta.ariaLabel && cta.ariaLabel !== cta.label ? cta.ariaLabel : undefined;
+    cta?.ariaLabel && cta?.ariaLabel !== cta?.label
+      ? cta?.ariaLabel
+      : undefined;
 
-  // className =
-  //   "rounded-lg border border-white px-5 py-3 text-center text-base font-medium text-white hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-400";
   // --- Base style ---
   const base =
     "inline-flex items-center justify-center rounded-lg px-5 py-3 text-base font-medium transition-colors duration-200";

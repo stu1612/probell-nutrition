@@ -5,23 +5,21 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 // internal libs (api, queries, uitls, enums, types)
-import { NavVM } from "./types";
 import { useNavStore } from "@/lib/stores/navStore";
+import { NAV_LINKS } from "@/app/constants/navigation";
+import { toNavVM } from "./mappers";
 
 // npm
 import clsx from "clsx";
 
-// compoenents
+// components
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 
-type NavClientProps = {
-  vm: NavVM;
-};
-
-export default function NavbarClient({ vm }: NavClientProps) {
+export default function NavbarClient() {
   // properties
   const pathname = usePathname();
+  const vm = toNavVM(NAV_LINKS);
 
   // stores
   const { scrolled, setScrolled } = useNavStore();
@@ -50,12 +48,8 @@ export default function NavbarClient({ vm }: NavClientProps) {
   return (
     <nav className={wrapperClasses}>
       <div className="mx-auto max-w-6xl px-6 py-2 md:py-0 md:px-2 lg:px-0">
-        <DesktopNav links={vm.primary} pathname={pathname ?? "/"} />
-        <MobileNav
-          primary={vm.primary}
-          secondary={vm.secondary}
-          pathname={pathname ?? "/"}
-        />
+        <DesktopNav links={vm} pathname={pathname ?? "/"} />
+        <MobileNav links={vm} pathname={pathname ?? "/"} />
       </div>
     </nav>
   );
