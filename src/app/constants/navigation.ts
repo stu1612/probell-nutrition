@@ -10,7 +10,9 @@ import {
   RotateCcw,
 } from "lucide-react";
 
-export const NAV_LINKS = [
+import { NavLink } from "../components/nav/types";
+
+export const NAV_LINKS: NavLink[] = [
   {
     id: "home",
     label: "Home",

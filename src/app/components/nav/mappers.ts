@@ -1,6 +1,5 @@
 import type { ComponentType } from "react";
-
-type NavLinkType = "primary" | "secondary";
+import { NavLinkType } from "./types";
 
 export function toNavVM(
   links: {
