@@ -1,7 +1,6 @@
 import type { ProductCard, SectionBase } from "@/types/components";
 import { imageProps, isNonEmpty } from "@/lib/helpers";
 
-/** UI-facing item shape (keeps your “selection” intent) */
 type Selection = {
   id: string;
   title: string | null;
@@ -10,7 +9,6 @@ type Selection = {
   slug: string | null;
 };
 
-/** Section VM your component can render against */
 type PromoViewModel = {
   layout: SectionBase | null;
   items: Selection[];

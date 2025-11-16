@@ -1,16 +1,17 @@
+// components
 import { ABOUT_CONTENT } from "@/app/constants/about";
+import SectionLayout from "../sectionLayout/sectionLayout";
+
+// npm
 import clsx from "clsx";
 
 export default function About() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-24" id="about-us">
-      <h2
-        className="relative inline-block text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight
-            after:absolute after:left-0 after:-bottom-1 after:h-1 after:w-full after:bg-gradient-to-r after:from-red-600 after:to-sky-500"
-      >
-        {ABOUT_CONTENT.title}
-      </h2>
-
+    <SectionLayout
+      id="about-us"
+      heading={ABOUT_CONTENT.title}
+      eyebrow={ABOUT_CONTENT.eyebrow}
+    >
       <ul className="mt-6 flex flex-wrap gap-3 text-sm">
         {ABOUT_CONTENT.pills.map((p, idx) => (
           <li
@@ -22,14 +23,14 @@ export default function About() {
         ))}
       </ul>
 
-      <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-3">
+      <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-3 items-start">
         <div>
-          <p className="max-w-prose text-slate-700 leading-relaxed text-lg">
+          <p className="max-w-prose text-slate-700 leading-relaxed text-base md:text-lg">
             {ABOUT_CONTENT.description}
           </p>
         </div>
 
-        <div className="grid col-span-1 md:col-span-2 md:grid-cols-2 auto-rows-fr gap-4">
+        <div className="grid col-span-1 md:col-span-2 md:grid-cols-2 gap-4">
           {/* Card: Purpose */}
           <CardImage
             className="order-2 md:order-1"
@@ -51,7 +52,7 @@ export default function About() {
           <CardImage className="order-4" url="/man-lifting-weights.jpg" />
         </div>
       </div>
-    </section>
+    </SectionLayout>
   );
 }
 
@@ -66,10 +67,16 @@ const CardText = ({
 }) => {
   return (
     <div
-      className={clsx(`${className} rounded-xl border border-slate-200 p-4`)}
+      className={clsx(
+        `${className} rounded-xl bg-white border border-slate-100 p-4 md:p-5 shadow-sm transition-shadow duration-200 hover:shadow-md`
+      )}
     >
-      <h3 className="text-lg font-semibold text-slate-900 mb-2">{title}</h3>
-      <p className="text-slate-700">{excerpt}</p>
+      <h3 className="text-base md:text-lg font-semibold text-slate-900 mb-2">
+        {title}
+      </h3>
+      <p className="text-sm md:text-base text-slate-700 leading-relaxed">
+        {excerpt}
+      </p>
     </div>
   );
 };

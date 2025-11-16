@@ -1,5 +1,6 @@
 export const ABOUT_CONTENT = {
   title: "Built on Strength, Backed by Purpose",
+  eyebrow: "Who We Are",
   pills: [
     "Clean ingredients",
     "Transparant labels",
