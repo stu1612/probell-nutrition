@@ -1,5 +1,6 @@
 export const KETTLEBELL_CONTENT = {
-  title: "",
+  eyebrow: "Probell Kettlebell Series",
+  title: "Where balance meets power, and design drives performance.",
   excerpts: [
     "Introducing the new Probell Kettlebell — where balance meets power, and design drives performance. Built to push limits, one rep at a time.",
     "Every curve and contour is engineered for confident grip and perfect balance through swings, presses, and pulls. Constructed from high-grade materials, it stands up to the toughest training — day after day.",

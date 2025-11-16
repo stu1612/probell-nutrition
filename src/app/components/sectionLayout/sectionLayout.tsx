@@ -1,58 +1,61 @@
-// internal libs (api, queries, uitls, enums, types)
-import { spacingToClass } from "./helpers";
-import { isNonEmpty } from "../hero/helpers";
-
-// components
-import { SectionBase } from "@/types/components";
-
 // npm
 import clsx from "clsx";
 
-type LayoutProps = {
-  children: React.ReactNode;
-  layout: SectionBase | null | undefined;
-  className?: string;
-  container?: boolean;
+type SectionLayoutProps = {
+  id?: string;
   heading?: string | null;
+  eyebrow?: string;
+  className?: string;
+  children: React.ReactNode;
 };
 
 export default function SectionLayout({
-  children,
-  layout,
-  className,
-  container = true,
+  id,
   heading,
-}: LayoutProps) {
-  if (layout && layout.isVisible === false) return null;
-
-  const pt = spacingToClass(layout?.paddingTop, "t");
-  const pb = spacingToClass(layout?.paddingBottom, "b");
-
-  const sectionClasses = clsx(pt, pb);
-  const wrapperClasses = clsx("w-full", className);
-  const id = layout?.anchorId ?? undefined;
-  const aria = layout?.internalLabel ?? layout?.sectionHeading ?? undefined;
-  const sectionHeading = isNonEmpty(heading) ? heading : null;
-
-  const content = (
-    <div className={wrapperClasses}>
-      <h2
-        className="relative inline-block text-2xl text-slate-800 tracking-tight
-             after:absolute after:left-0 after:-bottom-1 after:h-1 after:w-full
-             after:bg-gradient-to-r after:from-red-600 after:to-sky-500"
-      >
-        {sectionHeading}
-      </h2>
-      {children}
-    </div>
-  );
+  eyebrow,
+  className,
+  children,
+}: SectionLayoutProps) {
   return (
-    <section id={id} aria-label={aria} className={sectionClasses}>
-      {container ? (
-        <div className="mx-auto max-w-6xl px-6">{content}</div>
-      ) : (
-        content
+    // <section
+    //   id={id}
+    //   className={clsx("mx-auto max-w-6xl px-6 py-16 md:py-24", className)}
+    // >
+    //   {heading && (
+    //     <h2
+    //       className="relative inline-block text-2xl text-slate-800 tracking-tight
+    //                  after:absolute after:left-0 after:-bottom-1 after:h-1 after:w-full
+    //                   after:bg-gradient-to-r after:from-red-600 after:to-sky-500"
+    //     >
+    //       {heading}
+    //     </h2>
+    //   )}
+
+    //   {children}
+    // </section>
+
+    <section
+      id={id}
+      className={clsx("mx-auto max-w-6xl px-6 py-16 md:py-24", className)}
+    >
+      {(heading || eyebrow) && (
+        <header className="mb-8 space-y-3">
+          {eyebrow && (
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
+              {eyebrow}
+            </p>
+          )}
+
+          {heading && (
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight">
+              {heading}
+            </h2>
+          )}
+          <span className="inline-block h-1 w-20 rounded-full bg-gradient-to-r from-red-500 to-sky-400" />
+        </header>
       )}
+
+      {children}
     </section>
   );
 }
