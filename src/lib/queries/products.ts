@@ -1,3 +1,4 @@
+// lib/queries.ts
 export const PRODUCT_LIST = `
   query ProductList($stage: Stage!) {
     productLists(stage: $stage) {
@@ -7,13 +8,17 @@ export const PRODUCT_LIST = `
         title
         slug
         excerpt
-        healthCategory   
-        image {
+        healthCategory      
+        isAvailable
+        productImage {
           id
           url
           width
           height
-          alt
+          fileName
+        }
+        seo {
+          ogImageAlt
         }
       }
     }

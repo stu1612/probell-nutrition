@@ -1,15 +1,18 @@
-// app/components/products/mappers.ts
-import type { ProductListEntry, ProductVM, HealthCategory } from "./types";
+// app/(pages)/(catalog)/products/mappers.ts
 
-function mapCategory(healthCategory: HealthCategory): ProductVM["category"] {
-  switch (healthCategory) {
-    case "PERFORMANCE":
-      return "Performance";
-    case "RECOVERY":
-      return "Recovery";
-  }
+import type { ProductListEntry, ProductVM, HealthCategoryRaw } from "./types";
+
+function mapCategory(raw: HealthCategoryRaw): ProductVM["category"] {
+  const value = raw?.trim().toLowerCase();
+
+  if (value === "performance") return "Performance";
+  if (value === "recovery") return "Recovery";
+
+  // Fallback if something weird comes through
+  return "Recovery";
 }
 
+// Map a single ProductList entry into a flat list of ProductVMs
 export function toProductsVM(list: ProductListEntry | undefined): ProductVM[] {
   if (!list) return [];
 
@@ -19,10 +22,11 @@ export function toProductsVM(list: ProductListEntry | undefined): ProductVM[] {
     slug: p.slug,
     excerpt: p.excerpt ?? "",
     image: {
-      url: p.image.url,
-      width: p.image.width,
-      height: p.image.height,
-      alt: p.image.alt,
+      url: p.productImage.url,
+      width: p.productImage.width,
+      height: p.productImage.height,
+      // Prefer SEO image alt, then fallback to filename, then title
+      alt: p.seo?.ogImageAlt || p.productImage.fileName || p.title,
     },
     category: mapCategory(p.healthCategory),
   }));
