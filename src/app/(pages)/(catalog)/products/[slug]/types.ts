@@ -1,8 +1,27 @@
-// CMS enum
 export type HealthCategory = "PERFORMANCE" | "RECOVERY";
 
-// Simple image type
-export type CmsImage = {
+export type UnitSizeEnum = "SIZE_SMALL" | "SIZE_MEDIUM" | "SIZE_LARGE";
+
+export type ServingsPerUnitEnum =
+  | "SERVES_132"
+  | "SERVES_60"
+  | "SERVES_33"
+  | "SERVES_30";
+
+export type AllergyTag =
+  | "CONTAINS_MILK"
+  | "CONTAINS_SOY"
+  | "CONTAINS_GLUTEN"
+  | "CONTAINS_EGGS"
+  | "CONTAINS_NUTS"
+  | "IS_VEGAN"
+  | "IS_SUGAR_FREE"
+  | "IS_LACTOSE_FREE"
+  | "IS_CAFFEINE_FREE";
+
+// ----- Shared image type -----
+
+export type DetailImage = {
   id: string;
   url: string;
   width: number;
@@ -10,23 +29,31 @@ export type CmsImage = {
   fileName: string;
 };
 
-// Pairs-with component
+// ----- ProductSpec from CMS -----
+
+export type ProductSpec = {
+  unitSize: UnitSizeEnum[]; // LIST, NON_NULL
+  servingsSize: string | null; // e.g. "33 g"
+  notes: string | null;
+  ingredients: string[]; // LIST, NON_NULL (String)
+  unitsPerCase: number | null;
+  servingsPerUnit: ServingsPerUnitEnum[]; // LIST, NON_NULL
+  allergyList: AllergyTag[]; // LIST, NON_NULL
+  nutritionalInformation: string | null;
+};
+
+// ----- Pairs-with component from CMS -----
+
 export type PairsWithItem = {
   id: string;
   title: string;
   slug: string;
-  image: CmsImage | null;
+  productImage: DetailImage | null;
 };
 
-// Product spec component
-export type ProductSpec = {
-  packageSize: string | null;
-  servings: string | null;
-  allergens: string | null;
-};
+// ----- Raw record from CMS for the detail page -----
 
-// Raw record from Hygraph
-export type ProductBlockRecord = {
+export type ProductDetailRecord = {
   id: string;
   title: string;
   slug: string;
@@ -34,21 +61,29 @@ export type ProductBlockRecord = {
   longDescription: string | null;
   healthCategory: HealthCategory | null;
   isAvailable: boolean | null;
+
   productSpec: ProductSpec | null;
-  productImage: CmsImage;
-  gallery: CmsImage[];
+
+  productImage: DetailImage;
+  gallery: DetailImage[];
+
   benefits: string | null;
   whenToUse: string | null;
   howToUse: string | null;
+
   pairsWellWith: PairsWithItem[];
+
   complianceNotes: string | null;
 };
 
-export type ProductBySlugResult = {
-  productBlock: ProductBlockRecord | null;
+export type ProductDetailListResult = {
+  productLists: {
+    id: string;
+    product: ProductDetailRecord[];
+  }[];
 };
 
-// View-model types
+// ----- View-model types for the client component -----
 
 export type ProductCategoryVM = "Performance" | "Recovery";
 
@@ -63,15 +98,19 @@ export type ProductDetailVM = {
   name: string;
   category: ProductCategoryVM | null;
   images: string[];
-  description: string; // longDescription
-  packageSize: string;
-  servings: string;
 
-  benefits: string[]; // split lines
-  whenToUse: string[]; // split lines
+  description: string;
+
+  packageSize: string; // "Small", "Medium", "Large"
+  servings: string; // "132 servings"
+  servingSize: string; // "33 g"
+  allergens: string; // "Contains milk, Contains soy"
+
+  benefits: string[];
+  whenToUse: string[];
   howToUse: string;
+
   pairsWellWith: PairsWithVM[];
 
   complianceNotes: string;
-  allergens: string;
 };
