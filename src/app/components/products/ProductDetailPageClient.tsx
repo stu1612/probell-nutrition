@@ -1,0 +1,256 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { Dumbbell, Clock, Flame, Heart } from "lucide-react";
+
+import type { ProductDetailVM } from "@/app/(pages)/(catalog)/products/[slug]/types";
+
+type Props = {
+  product: ProductDetailVM;
+};
+
+export default function ProductDetailPageClient({ product }: Props) {
+  const router = useRouter();
+
+  const [selectedImage, setSelectedImage] = useState(product.images[0]);
+
+  const handleBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/products");
+    }
+  };
+
+  // Derive some arrays for the UI
+  const benefits = product.benefits;
+  const whenToUse = product.whenToUse;
+  const pairs = product.pairsWellWith;
+
+  return (
+    <section className="relative min-h-screen overflow-hidden">
+      {/* Full-page background image with light overlay */}
+      <div className="fixed inset-0 -z-10">
+        <div
+          className="h-full w-full bg-center bg-cover"
+          style={{ backgroundImage: "url(/kettlebell_swing.jpg)" }}
+        />
+        <div className="absolute inset-0 bg-white/85" />
+      </div>
+
+      {/* Fixed back button */}
+      <button
+        onClick={handleBack}
+        className="fixed left-4 bottom-6 z-40 inline-flex items-center gap-2 rounded-full bg-slate-900/85 px-4 py-2 text-sm font-medium text-slate-100
+                   ring-1 ring-slate-800 shadow-md backdrop-blur hover:bg-slate-800 hover:text-white transition-colors"
+      >
+        <svg
+          className="h-4 w-4"
+          viewBox="0 0 14 10"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M13 5H1m0 0L5 1M1 5l4 4"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        Back
+      </button>
+
+      {/* Main content */}
+      <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-24 lg:px-8">
+        {/* Header block: pill + title */}
+        <header className="max-w-3xl">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            {product.category && (
+              <span className="inline-flex items-center rounded-full bg-slate-900/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-800 ring-1 ring-slate-200">
+                {product.category}
+              </span>
+            )}
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
+              Probell Nutrition
+            </span>
+          </div>
+
+          <h1 className="product-title font-extrabold tracking-tight text-slate-900">
+            {product.name}
+          </h1>
+        </header>
+
+        {/* Hero row: image + supporting content */}
+        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-2 items-start">
+          {/* Image column */}
+          <div>
+            <div className="relative bg-white/95 rounded-2xl p-6 md:p-8 ring-1 ring-slate-200 shadow-[0_18px_45px_rgba(15,23,42,0.18)] flex items-center justify-center">
+              <Image
+                src={selectedImage}
+                alt={product.name}
+                width={560}
+                height={560}
+                className="object-contain drop-shadow-[0_18px_40px_rgba(15,23,42,0.55)]"
+              />
+            </div>
+
+            {/* Thumbnails below */}
+            <div className="mt-5 flex justify-center gap-4 flex-wrap">
+              {product.images.map((img) => (
+                <button
+                  key={img}
+                  onClick={() => setSelectedImage(img)}
+                  className={`relative w-16 h-16 rounded-xl overflow-hidden ring-2 transition 
+                    ${
+                      selectedImage === img
+                        ? "ring-gold"
+                        : "ring-transparent hover:ring-slate-300/80"
+                    }`}
+                >
+                  <Image
+                    src={img}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right column: description + specs + B2B info */}
+          <div className="text-slate-900 flex flex-col gap-6">
+            <p className="text-base md:text-lg leading-relaxed text-slate-700">
+              {product.description}
+            </p>
+
+            <div className="flex flex-wrap gap-3 text-sm md:text-base font-semibold text-slate-900">
+              {product.packageSize && (
+                <span className="bg-white px-4 py-2 rounded-full ring-1 ring-slate-200 shadow-sm">
+                  {product.packageSize}
+                </span>
+              )}
+              {product.servings && (
+                <span className="bg-white px-4 py-2 rounded-full ring-1 ring-slate-200 shadow-sm">
+                  {product.servings}
+                </span>
+              )}
+            </div>
+
+            <p className="text-sm md:text-base text-slate-600">
+              This product is not sold directly online. For wholesale or
+              partnership enquiries,{" "}
+              <Link
+                href="/contact"
+                className="font-semibold text-slate-900 underline-offset-2 hover:underline"
+              >
+                contact Probell Nutrition
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="h-[1px] mt-16 bg-gradient-to-r from-red-600 to-sky-400 opacity-80" />
+
+        {/* Benefits */}
+        {benefits.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">
+              What It’s Good For
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {benefits.map((text, i) => {
+                const Icon = [Dumbbell, Flame, Clock, Heart][i] ?? Dumbbell;
+                return (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center justify-center bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm transition-shadow duration-200 hover:shadow-md"
+                  >
+                    <Icon className="h-8 w-8 text-red-500 mb-3" />
+                    <p className="text-center text-slate-800 text-sm font-medium">
+                      {text}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* When to use + How to use + Pairs well with */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-10">
+          {/* When & how to use */}
+          <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-900 mb-3">
+              When to Use
+            </h2>
+            {whenToUse.length > 0 ? (
+              <ul className="list-disc list-inside text-slate-700 space-y-1">
+                {whenToUse.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-slate-700">Follow the product label.</p>
+            )}
+
+            {product.howToUse && (
+              <>
+                <h3 className="mt-5 text-sm font-semibold text-slate-900">
+                  How to Use
+                </h3>
+                <p className="mt-1 text-slate-700">{product.howToUse}</p>
+              </>
+            )}
+          </div>
+
+          {/* Pairs well with + Compliance */}
+          <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm space-y-6">
+            {pairs.length > 0 && (
+              <div>
+                <h2 className="text-xl font-bold text-slate-900 mb-3">
+                  Pairs Well With
+                </h2>
+                <ul className="space-y-2 text-slate-700">
+                  {pairs.map((item) => (
+                    <li key={item.id}>
+                      <Link
+                        href={`/products/${item.slug}`}
+                        className="font-semibold text-slate-900 hover:underline underline-offset-2"
+                      >
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div>
+              <h2 className="text-xl font-bold text-red-600 mb-3">
+                Health & Compliance
+              </h2>
+              {product.allergens && (
+                <p className="text-sm text-slate-700 mb-2">
+                  <span className="font-semibold">Allergens: </span>
+                  {product.allergens}
+                </p>
+              )}
+              {product.complianceNotes && (
+                <p className="text-slate-700 text-sm leading-relaxed">
+                  {product.complianceNotes}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
