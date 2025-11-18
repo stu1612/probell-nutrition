@@ -1,14 +1,24 @@
-export const PRODUCTS = `
-  query ProductLists() {
-    productLists(stage: PUBLISHED, first: 1) {
+// lib/queries.ts
+export const PRODUCT_LIST = `
+  query ProductList($stage: Stage!) {
+    productLists(stage: $stage) {
       id
-      product(where: { isAvailable: true }, first: $limit) {
+      product {
         id
         title
         slug
         excerpt
+        healthCategory      
+        isAvailable
         productImage {
+          id
           url
+          width
+          height
+          fileName
+        }
+        seo {
+          ogImageAlt
         }
       }
     }
