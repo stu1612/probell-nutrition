@@ -7,16 +7,8 @@ import type { ProductDetailListResult, ProductDetailRecord } from "./types";
 import { toProductDetailVM } from "./mappers";
 import ProductDetailPageClient from "@/app/components/products/ProductDetailPageClient";
 
-type Props = {
-  params: { slug: string };
-};
-
-export default async function ProductPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params;
+export default async function ProductPage(props: { params: { slug: string } }) {
+  const { slug } = props.params;
 
   const { productLists } = await hygraph<ProductDetailListResult>({
     query: PRODUCT_DETAIL,
