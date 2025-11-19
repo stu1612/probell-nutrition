@@ -7,8 +7,12 @@ import type { ProductDetailListResult, ProductDetailRecord } from "./types";
 import { toProductDetailVM } from "./mappers";
 import ProductDetailPageClient from "@/app/components/products/ProductDetailPageClient";
 
-export default async function ProductPage(props: { params: { slug: string } }) {
-  const { slug } = props.params;
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
   const { productLists } = await hygraph<ProductDetailListResult>({
     query: PRODUCT_DETAIL,
