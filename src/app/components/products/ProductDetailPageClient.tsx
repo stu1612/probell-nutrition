@@ -6,43 +6,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { Dumbbell, Clock, Flame, Heart } from "lucide-react";
 
-export default function ProductDetailPage() {
+import type { ProductDetailVM } from "@/app/(pages)/(catalog)/product/[slug]/types";
+
+type Props = {
+  product: ProductDetailVM;
+};
+
+export default function ProductDetailPageClient({ product }: Props) {
   const router = useRouter();
 
-  const product = {
-    name: "Probell Whey Protein - Vanilla",
-    category: "Recovery" as "Recovery" | "Performance",
-    images: [
-      "/whey_vanilla.png",
-      "/whey_vanilla_docs_1.jpg",
-      "/whey_vanilla_docs_2.jpg",
-    ],
-    description:
-      "Probell Whey Protein is engineered for athletes who demand clean recovery and consistent performance. Fast-absorbing, high-quality protein that fuels your strength — without compromise.",
-    whenToUse:
-      "Consume post-workout or between meals to enhance recovery and support daily protein intake.",
-    benefits: [
-      { icon: Dumbbell, text: "Supports muscle recovery" },
-      { icon: Flame, text: "Helps maintain training performance" },
-      { icon: Clock, text: "Quick absorption post-workout" },
-      { icon: Heart, text: "Supports overall wellness and consistency" },
-    ],
-    ingredients: [
-      "Whey protein concentrate",
-      "Whey protein isolate",
-      "Natural vanilla flavor",
-      "Lecithin (soy)",
-      "Sucralose",
-    ],
-    packageSize: "1kg",
-    servings: "33 servings",
-    healthInfo:
-      "Not recommended for individuals who are pregnant, nursing, or under 18 years of age. Consult your physician before use.",
-    allergens:
-      "Contains milk and soy (lecithin). Produced in a facility that also processes nuts.",
-  };
-
   const [selectedImage, setSelectedImage] = useState(product.images[0]);
+
+  const BENEFIT_ICONS = [Dumbbell, Flame, Clock, Heart];
 
   const handleBack = () => {
     if (typeof window !== "undefined" && window.history.length > 1) {
@@ -51,6 +26,12 @@ export default function ProductDetailPage() {
       router.push("/products");
     }
   };
+
+  // Derive some arrays for the UI
+  const benefits = product.benefits;
+  const whenToUse = product.whenToUse;
+  const pairs = product.pairsWellWith ?? [];
+  const ingredients = product.ingredients ?? [];
 
   return (
     <section className="relative min-h-screen overflow-hidden">
@@ -88,7 +69,7 @@ export default function ProductDetailPage() {
 
       {/* Main content */}
       <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-24 lg:px-8">
-        {/* Header block: pill + title + subtitle */}
+        {/* Header block: pill + title */}
         <header className="max-w-3xl">
           <div className="flex flex-wrap items-center gap-3 mb-4">
             {product.category && (
@@ -110,7 +91,6 @@ export default function ProductDetailPage() {
         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-2 items-start">
           {/* Image column */}
           <div>
-            {/* Main image */}
             <div className="relative bg-white/95 rounded-2xl p-6 md:p-8 ring-1 ring-slate-200 shadow-[0_18px_45px_rgba(15,23,42,0.18)] flex items-center justify-center">
               <Image
                 src={selectedImage}
@@ -145,24 +125,25 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
-          {/* Right column: specs + B2B info */}
+          {/* Right column: description + specs + B2B info */}
           <div className="text-slate-900 flex flex-col gap-6">
-            {/* Description – bigger + more relaxed */}
             <p className="text-base md:text-lg leading-relaxed text-slate-700">
               {product.description}
             </p>
 
-            {/* Quick specs */}
             <div className="flex flex-wrap gap-3 text-sm md:text-base font-semibold text-slate-900">
-              <span className="bg-white px-4 py-2 rounded-full ring-1 ring-slate-200 shadow-sm">
-                {product.packageSize}
-              </span>
-              <span className="bg-white px-4 py-2 rounded-full ring-1 ring-slate-200 shadow-sm">
-                {product.servings}
-              </span>
+              {product.packageSize && (
+                <span className="bg-white px-4 py-2 rounded-full ring-1 ring-slate-200 shadow-sm">
+                  {product.packageSize}
+                </span>
+              )}
+              {product.servings && (
+                <span className="bg-white px-4 py-2 rounded-full ring-1 ring-slate-200 shadow-sm">
+                  {product.servings}
+                </span>
+              )}
             </div>
 
-            {/* B2B note */}
             <p className="text-sm md:text-base text-slate-600">
               This product is not sold directly online. For wholesale or
               partnership enquiries,{" "}
@@ -185,52 +166,131 @@ export default function ProductDetailPage() {
           <h2 className="text-2xl font-bold text-slate-900 mb-6">
             What It’s Good For
           </h2>
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {product.benefits.map((b, i) => (
-              <div
-                key={i}
-                className="flex flex-col items-center justify-center bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm transition-shadow duration-200 hover:shadow-md"
-              >
-                <b.icon className="h-8 w-8 text-red-500 mb-3" />
-                <p className="text-center text-slate-800 text-sm font-medium">
-                  {b.text}
-                </p>
-              </div>
-            ))}
+            {(benefits ?? []).map((text, i) => {
+              const Icon = BENEFIT_ICONS[i % BENEFIT_ICONS.length];
+
+              return (
+                <div
+                  key={i}
+                  className="flex flex-col items-center justify-center bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm transition-shadow duration-200 hover:shadow-md"
+                >
+                  <Icon className="h-8 w-8 text-red-500 mb-3" />
+                  <p className="text-center text-slate-800 text-sm font-medium">
+                    {text}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* When to use */}
-        <div className="mt-16 rounded-2xl bg-white/95 px-6 py-8 md:px-8 md:py-10 ring-1 ring-slate-200 shadow-sm">
-          <h2 className="text-xl font-bold text-slate-900 mb-3">When to Use</h2>
-          <p className="max-w-3xl text-slate-700 leading-relaxed">
-            {product.whenToUse}
-          </p>
-        </div>
+        {/* Detail grid: 2 x 2 cards */}
+        <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+          {/* When & How to use */}
+          <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-900 mb-3">
+              When to Use
+            </h2>
+            {whenToUse.length > 0 ? (
+              <ul className="list-disc list-inside text-slate-700 space-y-1">
+                {whenToUse.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-slate-700">Follow the product label.</p>
+            )}
 
-        {/* Ingredients & Health Info */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-10">
+            {product.howToUse && (
+              <>
+                <h3 className="mt-5 text-sm font-semibold text-slate-900">
+                  How to Use
+                </h3>
+                <p className="mt-1 text-slate-700 leading-relaxed">
+                  {product.howToUse}
+                </p>
+              </>
+            )}
+          </div>
+
+          {/* Ingredients */}
           <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm">
             <h2 className="text-xl font-bold text-slate-900 mb-3">
               Ingredients
             </h2>
-            <ul className="list-disc list-inside text-slate-700 space-y-1">
-              {product.ingredients.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
+            {ingredients.length > 0 ? (
+              <ul className="list-disc list-inside text-slate-700 space-y-1">
+                {ingredients.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-slate-700">
+                See label for full ingredients list.
+              </p>
+            )}
           </div>
 
+          {/* Pairs well with */}
+          <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-900 mb-4">
+              Pairs Well With
+            </h2>
+
+            {pairs.length > 0 ? (
+              <ul className="space-y-3">
+                {pairs.map((item) => (
+                  <li key={item.id}>
+                    <Link
+                      href={`/product/${item.slug}`}
+                      className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-slate-50 transition-colors"
+                    >
+                      {item.imageUrl && (
+                        <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-slate-100 ring-1 ring-slate-200">
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.title}
+                            fill
+                            sizes="40px"
+                            className="object-contain"
+                          />
+                        </div>
+                      )}
+                      <span className="text-sm font-semibold text-slate-900">
+                        {item.title}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-slate-700 text-sm">
+                This product stacks well with other Probell essentials like whey
+                and creatine.
+              </p>
+            )}
+          </div>
+
+          {/* Health & Compliance */}
           <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm">
             <h2 className="text-xl font-bold text-red-600 mb-3">
-              Health Information
+              Health & Compliance
             </h2>
-            <p className="text-slate-700 leading-relaxed">
-              {product.healthInfo}
-            </p>
-            <p className="mt-3 text-sm text-slate-600 italic">
-              {product.allergens}
-            </p>
+
+            {product.allergens && (
+              <p className="text-sm text-slate-700 mb-2">
+                <span className="font-semibold">Allergens: </span>
+                {product.allergens}
+              </p>
+            )}
+
+            {product.complianceNotes && (
+              <p className="text-slate-700 text-sm leading-relaxed">
+                {product.complianceNotes}
+              </p>
+            )}
           </div>
         </div>
       </div>
