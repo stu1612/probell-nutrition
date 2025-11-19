@@ -34,7 +34,7 @@ export default function ProductsPageClient({ products }: Props) {
           {products.map((p) => (
             <Link
               key={p.slug}
-              href={`/products/${p.slug}`}
+              href={`/product/${p.slug}`}
               className="group relative flex w-full max-w-[340px] flex-col rounded-2xl bg-white ring-1 ring-slate-200 shadow-sm
                        transition-transform duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md hover:ring-slate-300"
             >

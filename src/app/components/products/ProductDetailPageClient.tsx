@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Dumbbell, Clock, Flame, Heart } from "lucide-react";
 
-import type { ProductDetailVM } from "@/app/(pages)/(catalog)/products/[slug]/types";
+import type { ProductDetailVM } from "@/app/(pages)/(catalog)/product/[slug]/types";
 
 type Props = {
   product: ProductDetailVM;
@@ -244,7 +244,7 @@ export default function ProductDetailPageClient({ product }: Props) {
                 {pairs.map((item) => (
                   <li key={item.id}>
                     <Link
-                      href={`/products/${item.slug}`}
+                      href={`/product/${item.slug}`}
                       className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-slate-50 transition-colors"
                     >
                       {item.imageUrl && (
