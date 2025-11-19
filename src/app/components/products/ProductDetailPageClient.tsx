@@ -17,6 +17,8 @@ export default function ProductDetailPageClient({ product }: Props) {
 
   const [selectedImage, setSelectedImage] = useState(product.images[0]);
 
+  const BENEFIT_ICONS = [Dumbbell, Flame, Clock, Heart];
+
   const handleBack = () => {
     if (typeof window !== "undefined" && window.history.length > 1) {
       router.back();
@@ -28,7 +30,8 @@ export default function ProductDetailPageClient({ product }: Props) {
   // Derive some arrays for the UI
   const benefits = product.benefits;
   const whenToUse = product.whenToUse;
-  const pairs = product.pairsWellWith;
+  const pairs = product.pairsWellWith ?? [];
+  const ingredients = product.ingredients ?? [];
 
   return (
     <section className="relative min-h-screen overflow-hidden">
@@ -159,33 +162,33 @@ export default function ProductDetailPageClient({ product }: Props) {
         <div className="h-[1px] mt-16 bg-gradient-to-r from-red-600 to-sky-400 opacity-80" />
 
         {/* Benefits */}
-        {benefits.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">
-              What It’s Good For
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {benefits.map((text, i) => {
-                const Icon = [Dumbbell, Flame, Clock, Heart][i] ?? Dumbbell;
-                return (
-                  <div
-                    key={i}
-                    className="flex flex-col items-center justify-center bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm transition-shadow duration-200 hover:shadow-md"
-                  >
-                    <Icon className="h-8 w-8 text-red-500 mb-3" />
-                    <p className="text-center text-slate-800 text-sm font-medium">
-                      {text}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">
+            What It’s Good For
+          </h2>
 
-        {/* When to use + How to use + Pairs well with */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-10">
-          {/* When & how to use */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {(benefits ?? []).map((text, i) => {
+              const Icon = BENEFIT_ICONS[i % BENEFIT_ICONS.length];
+
+              return (
+                <div
+                  key={i}
+                  className="flex flex-col items-center justify-center bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm transition-shadow duration-200 hover:shadow-md"
+                >
+                  <Icon className="h-8 w-8 text-red-500 mb-3" />
+                  <p className="text-center text-slate-800 text-sm font-medium">
+                    {text}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Detail grid: 2 x 2 cards */}
+        <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+          {/* When & How to use */}
           <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm">
             <h2 className="text-xl font-bold text-slate-900 mb-3">
               When to Use
@@ -205,49 +208,89 @@ export default function ProductDetailPageClient({ product }: Props) {
                 <h3 className="mt-5 text-sm font-semibold text-slate-900">
                   How to Use
                 </h3>
-                <p className="mt-1 text-slate-700">{product.howToUse}</p>
+                <p className="mt-1 text-slate-700 leading-relaxed">
+                  {product.howToUse}
+                </p>
               </>
             )}
           </div>
 
-          {/* Pairs well with + Compliance */}
-          <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm space-y-6">
-            {pairs.length > 0 && (
-              <div>
-                <h2 className="text-xl font-bold text-slate-900 mb-3">
-                  Pairs Well With
-                </h2>
-                <ul className="space-y-2 text-slate-700">
-                  {pairs.map((item) => (
-                    <li key={item.id}>
-                      <Link
-                        href={`/products/${item.slug}`}
-                        className="font-semibold text-slate-900 hover:underline underline-offset-2"
-                      >
+          {/* Ingredients */}
+          <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-900 mb-3">
+              Ingredients
+            </h2>
+            {ingredients.length > 0 ? (
+              <ul className="list-disc list-inside text-slate-700 space-y-1">
+                {ingredients.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-slate-700">
+                See label for full ingredients list.
+              </p>
+            )}
+          </div>
+
+          {/* Pairs well with */}
+          <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-900 mb-4">
+              Pairs Well With
+            </h2>
+
+            {pairs.length > 0 ? (
+              <ul className="space-y-3">
+                {pairs.map((item) => (
+                  <li key={item.id}>
+                    <Link
+                      href={`/products/${item.slug}`}
+                      className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-slate-50 transition-colors"
+                    >
+                      {item.imageUrl && (
+                        <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-slate-100 ring-1 ring-slate-200">
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.title}
+                            fill
+                            sizes="40px"
+                            className="object-contain"
+                          />
+                        </div>
+                      )}
+                      <span className="text-sm font-semibold text-slate-900">
                         {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-slate-700 text-sm">
+                This product stacks well with other Probell essentials like whey
+                and creatine.
+              </p>
+            )}
+          </div>
+
+          {/* Health & Compliance */}
+          <div className="bg-white/95 p-6 rounded-xl ring-1 ring-slate-200 shadow-sm">
+            <h2 className="text-xl font-bold text-red-600 mb-3">
+              Health & Compliance
+            </h2>
+
+            {product.allergens && (
+              <p className="text-sm text-slate-700 mb-2">
+                <span className="font-semibold">Allergens: </span>
+                {product.allergens}
+              </p>
             )}
 
-            <div>
-              <h2 className="text-xl font-bold text-red-600 mb-3">
-                Health & Compliance
-              </h2>
-              {product.allergens && (
-                <p className="text-sm text-slate-700 mb-2">
-                  <span className="font-semibold">Allergens: </span>
-                  {product.allergens}
-                </p>
-              )}
-              {product.complianceNotes && (
-                <p className="text-slate-700 text-sm leading-relaxed">
-                  {product.complianceNotes}
-                </p>
-              )}
-            </div>
+            {product.complianceNotes && (
+              <p className="text-slate-700 text-sm leading-relaxed">
+                {product.complianceNotes}
+              </p>
+            )}
           </div>
         </div>
       </div>

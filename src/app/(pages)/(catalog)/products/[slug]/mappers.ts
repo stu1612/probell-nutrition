@@ -115,6 +115,8 @@ export function toProductDetailVM(
     whenToUse: splitLines(record.whenToUse),
     howToUse: record.howToUse ?? "",
 
+    ingredients: spec?.ingredients ?? [],
+
     pairsWellWith: mapPairsWith(record.pairsWellWith),
 
     complianceNotes: record.complianceNotes ?? "",

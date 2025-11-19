@@ -4,8 +4,8 @@ import { PRODUCT_DETAIL } from "@/lib/queries";
 
 import type { ProductDetailListResult, ProductDetailRecord } from "./types";
 
-// import { toProductDetailVM } from "./mappers";
-// import ProductDetailPageClient from "@/app/components/products/ProductDetailPageClient";
+import { toProductDetailVM } from "./mappers";
+import ProductDetailPageClient from "@/app/components/products/ProductDetailPageClient";
 
 type Props = {
   params: { slug: string };
@@ -19,11 +19,15 @@ export default async function ProductPage({ params }: Props) {
     variables: { stage: "PUBLISHED" },
   });
 
-  console.log(productLists);
-
-  return (
-    <div>
-      <p>test</p>
-    </div>
+  const allProducts: ProductDetailRecord[] = productLists.flatMap(
+    (list) => list.product
   );
+
+  const record = allProducts.find((p) => p.slug === slug);
+
+  if (!record) return notFound();
+
+  const vm = toProductDetailVM(record);
+
+  return <ProductDetailPageClient product={vm} />;
 }

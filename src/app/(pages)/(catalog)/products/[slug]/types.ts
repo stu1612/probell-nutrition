@@ -110,6 +110,8 @@ export type ProductDetailVM = {
   whenToUse: string[];
   howToUse: string;
 
+  ingredients: string[];
+
   pairsWellWith: PairsWithVM[];
 
   complianceNotes: string;
